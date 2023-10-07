@@ -13,7 +13,14 @@ interface TrimmerProps extends BoxProps {
 const Trimmer = React.forwardRef<HTMLDivElement, TrimmerProps>(
   ({ previewRefs, duration, value, onChange, ...props }, ref) => {
     return (
-      <Box {...props} ref={ref} pos="relative">
+      <Box {...props} ref={ref} pos="relative" 
+      style={ 
+        {
+          // Установите здесь желаемую высоту контейнера с прокруткой
+          overflowY: 'scroll',
+        }
+      }>
+        {/* <div onWheel={andleZoom} style={{ width: '100%', transform: `scale(${scale})` }}></div> */}
         <Preview
           previewRefs={previewRefs}
           pos="absolute"
@@ -25,6 +32,11 @@ const Trimmer = React.forwardRef<HTMLDivElement, TrimmerProps>(
           sx={{ overflow: "hidden" }}
           align="stretch"
           h={40}
+          style={ 
+            {
+              // overflowY: 'scroll'
+            }
+          }
         />
         <RangeSlider
           h={40}
@@ -44,10 +56,11 @@ const Trimmer = React.forwardRef<HTMLDivElement, TrimmerProps>(
               "::before": { backgroundColor: "unset" },
             },
             bar: { backgroundColor: "unset" },
+           
           }}
         />
         <Group sx={{ justifyContent: "end" }}>
-          <Text>{formatDuration(value[1] - value[0])}</Text>
+          <Text>Video Duration {formatDuration(value[1] - value[0])}</Text>
         </Group>
       </Box>
     );

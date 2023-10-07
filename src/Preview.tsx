@@ -11,7 +11,7 @@ export const Preview = ({ previewRefs, ...props }: PreviewProps) => {
       {previewRefs.map((ref, idx) => (
         <canvas
           height={40}
-          width={40 * (16 / 9)}
+          width={50 * (16 / 9)}
           ref={ref}
           key={idx}
           style={{ flex: 1 }}

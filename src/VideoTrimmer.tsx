@@ -7,6 +7,9 @@ import { useTimeline } from "./hooks/useTimeline";
 
 interface VideoTrimmerProps {
   streamUrl: string;
+  hlsLiveStreamUrl: string;
+  uploadedVideoUrl: string;
+  trimmedStreamUrl:string;
 }
 
 const VideoTrimmer = ({ streamUrl }: VideoTrimmerProps) => {
@@ -14,6 +17,29 @@ const VideoTrimmer = ({ streamUrl }: VideoTrimmerProps) => {
   const [duration, setDuration] = useState(0);
   const [rangeValue, setRangeValue] = useState<[number, number]>([0, 0]);
   const [trimmerRef, trimmerRect] = useResizeObserver();
+  
+  const [zoomIn, setZoomIn] = useState(0); // Начальное значение зума, 0%
+  const [zoomOut, setZoomOut] = useState(0); // Начальное значение зума, 0%
+
+  const handleZoomIn = () => {
+    const newZoomIn = zoomIn + 12.5; // Увеличиваем зум на 12.5%
+    setZoomIn(newZoomIn);
+  };
+
+  const handleZoomOut = () => {
+    const newZoomOut = zoomOut + 12.5; // Уменьшаем зум на 12.5%
+    setZoomOut(newZoomOut);
+  };
+
+  useEffect(() => {
+    const element = document.querySelector(".mantine-1fmcac4") as HTMLElement;
+    if (element) {
+      element.style.width = `${100 + zoomIn - zoomOut}%`;
+      element.style.overflowY = "scroll";
+    }
+  }, [zoomIn, zoomOut]);
+
+
 
   const { thumbnailRef, previewRefs } = useTimeline({
     sliderWidth: trimmerRect.width,
@@ -39,6 +65,7 @@ const VideoTrimmer = ({ streamUrl }: VideoTrimmerProps) => {
   }, [videoRef, setDuration]);
 
   return (
+   
     <Box pos="relative">
       <video
         src={streamUrl}
@@ -66,6 +93,9 @@ const VideoTrimmer = ({ streamUrl }: VideoTrimmerProps) => {
         }}
         ref={videoRef}
       />
+<button onClick={handleZoomIn}>Zoom In</button>
+<button onClick={handleZoomOut}>Zoom Out</button>
+    
       <Trimmer
         duration={duration}
         value={rangeValue}
